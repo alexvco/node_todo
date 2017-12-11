@@ -1,16 +1,32 @@
+var bodyParser = require('body-parser');
+
+// normally you would get data from the db, but we are not doing any database in this tutorial
+var data = [{item: 'get milk'}, {item: 'walk dog'}, {item: 'kick some coding ass'}];
+
+// this is the middleware that we will run in the post request to parse the body of the request
+var urlencodedParser = bodyParser.urlencoded({extended: false});
+
 // note that the app that we are passing in as parameter is: app = express();
 module.exports = function(app){
 
   app.get('/todo', function(req, res){
-    res.render('todo')
+    // this is how you pass data into your views
+    res.render('todo', {todos: data});
   });
 
-  app.post('/todo', function(req, res){
-
+  app.post('/todo', urlencodedParser, function(req, res){
+    data.push(req.body);
+    res.json(data); // this is sending json back to the ajax success function which then reloads the page with the new data.
   });
 
-  app.delete('/todo', function(req, res){
-
+  app.delete('/todo/:item', function(req, res){
+    // the following function is cycling through each todo item and we are returning true or false, 
+    // if that item returns true then the item remains in the array, if false it deletes it from the array
+    // we are also replacing spaces with hyphens because you cant have spaces in the url
+    data = data.filter(function(todo){
+      return todo.item.replace(/ /g, '-') !== req.params.item;
+    });
+    res.json(data); // this is sending json back to the ajax success function which then reloads the page with the new data.
   });
 
 };

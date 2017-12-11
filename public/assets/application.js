@@ -11,7 +11,7 @@ $(document).ready(function(){
         data: todo,
         success: function(data){
           //do something with the data via front-end framework
-          location.reload();
+          location.reload(); //reload the page
         }
       });
 
@@ -20,6 +20,7 @@ $(document).ready(function(){
   });
 
   $('li').on('click', function(){
+    // this replaces any spaces with hyphens
       var item = $(this).text().replace(/ /g, "-");
       $.ajax({
         type: 'DELETE',
