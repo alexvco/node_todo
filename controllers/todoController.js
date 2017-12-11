@@ -1,4 +1,20 @@
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+
+//Connect to the database
+mongoose.connect('mongodb://alexkeenability:testkeenability@ds135876.mlab.com:35876/node_todo_development');
+
+//Create a schema
+var todoSchema = new mongoose.Schema({
+  item: String
+});
+
+// Convention is to use capital when creating a model
+var Todo = mongoose.model('Todo', todoSchema)
+var itemOne = Todo({item: 'buy flowers'}).save(function(err){
+  if (err) throw err;
+  console.log('item saved');
+});
 
 // normally you would get data from the db, but we are not doing any database in this tutorial
 var data = [{item: 'get milk'}, {item: 'walk dog'}, {item: 'kick some coding ass'}];
